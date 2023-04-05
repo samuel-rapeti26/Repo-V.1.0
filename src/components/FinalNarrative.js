@@ -67,7 +67,7 @@ const FinalNarrative = () => {
 
   return (
     <div id="diff-highlighter">
-      <div ref={diffHighlighter}>{result}</div>
+      <div ref={diffHighlighter} className="max-h-96 overflow-auto">{result}</div>
 
       <div className="w-full flex justify-end items-center px-4 gap-2">
         <Button size="large" variant="contained" onClick={generate}>

@@ -54,7 +54,7 @@ const SuggestionContent = ({ paragraphs, selectedNaratives, parasContent }) => {
     dispatch(SetModifiedText(output));
   }, [output]);
   return (
-    <div>
+    <div className="max-h-96 overflow-auto">
       <TextareaAutosize
         value={modifiedOutput}
         onChange={onModifiedOutputChange}

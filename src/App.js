@@ -1,20 +1,19 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+
+import { IconButton, Button, Backdrop, CircularProgress, Menu, MenuItem } from "@mui/material";
+import Cookies from "js-cookie";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+
 import InputComponent from "./components/inputComponent";
 import OutputComponent from "./components/outputComponent";
 import DictionarieComponent from "./components/dictionarieComponent";
-import AccountCircle from "@mui/icons-material/AccountCircle";
+import { Modal } from "./components/common/modal";
+import { SetCorrectionTable } from "./reducers/correctionTable/CorrectionTableActions";
 import ManualPdf from "./assets/Smart Error Detector Tool_User Manual_V1.0.0.pdf";
 import "./style.css";
-import { IconButton } from "@mui/material";
-import Cookies from "js-cookie";
-import Backdrop from "@mui/material/Backdrop";
-import CircularProgress from "@mui/material/CircularProgress";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { SetCorrectionTable } from "./reducers/correctionTable/CorrectionTableActions";
 
 function App() {
   const navigate = useNavigate();
@@ -26,6 +25,7 @@ function App() {
     userManual: false,
   });
   const [parasContent, setParasContent] = useState([]);
+  const [noErrorModal, setNoErrorModal] = useState(false);
   const [paragraph, setParagraph] = useState("");
   const key1 = Cookies.get("access_token_cookie");
   const key2 = Cookies.get("csrf_access_token");
@@ -49,8 +49,8 @@ function App() {
       axios
         .post("http://localhost:2000/summary", payload, { headers: headers1 })
         .then((response) => {
-          console.log("response", response);
-          const rowdata = Object.keys(response.data.output.Category).map(
+          // console.log("response", response);
+          const rowdata = response.data.output.Category ? Object.keys(response.data.output.Category).map(
             (key) => ({
               id: key,
               error: response.data.output.Error[key],
@@ -63,14 +63,21 @@ function App() {
               FrontendAction: response.data.output.FrontendAction[key],
               ParagraphNum: response.data.output.ParagraphNum[key],
             })
-          );
-          setParasContent(data);
-          dispatch(SetCorrectionTable(rowdata));
-          setSidebarItems({
-            ...sidebarItems,
-            output: true,
-            input: false,
-          });
+          ) : [];
+          const noErrorsFound = response && response.data && response.data.output && response.data.output === "No Errors Found.";
+          if(noErrorsFound) {
+            setNoErrorModal(noErrorsFound);
+          } else {
+            setParasContent(data);
+            dispatch(SetCorrectionTable(rowdata));
+            setSidebarItems({
+              ...sidebarItems,
+              output: true,
+              input: false,
+            });
+          }
+          
+          
         })
         .catch((error) => {
           console.log("error", error);
@@ -284,6 +291,32 @@ function App() {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
+      <Modal
+        modalId=""
+        open={noErrorModal}
+        setOpen={() => setNoErrorModal(false)}
+        title={""}
+        size="sm"
+        escape
+        content={
+          <div className="flex flex-col gap-4 items-center justify-center">
+            <h2 className="text-4xl font-semibold text-gray-500 text-uppercase">
+              No Errors found
+            </h2>
+          
+            <div className="flex justify-end gap-2">
+              <Button
+                size="small"
+                variant="contained"
+                color="warning"
+                onClick={() => setNoErrorModal(false)}
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        }
+      />
     </div>
   );
 }

@@ -15,7 +15,7 @@ const OutputComponent = ({ clickRevertBack, parasContent }) => {
     <Paper elevation={3}>
       <div className="p-4">
         <Typography variant="h6" gutterBottom>
-          Error Highligting and Correction
+          Error Highlighting and Correction
         </Typography>
         <ErrorHighligtingCorrection
           rows={correctionTable}

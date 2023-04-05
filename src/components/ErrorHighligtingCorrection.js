@@ -96,8 +96,8 @@ const ErrorHighligtingCorrection = ({
   });
   const columns = [
     {
-      field: "ParagraphNum",
-      headerName: "Paragraph Num",
+      field: "id",
+      headerName: "Serial Num",
       flex: 1,
     },
     {
@@ -124,6 +124,9 @@ const ErrorHighligtingCorrection = ({
     <div className="flex flex-col gap-4">
       <div className="grid grid-cols-1  lg:grid-cols-2 gap-4 h-full">
         <div className="flex flex-col gap-4">
+          <strong style={{ color:"red"}}>
+          Note: Update dictionary will work only for those error whose Error Type is Spelling mistake (proper Noun)
+          </strong>
           <DataGrid
             rows={filteredData}
             columns={columns}

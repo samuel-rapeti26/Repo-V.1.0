@@ -33,10 +33,11 @@ function ErrorsContent({ paragraphs, parasContent }) {
       }
 
       // Add the highlighted error text
+      let x = parseInt(currentError.id)
       const errorText = para.slice(start, end);
       const highlightIndex = start + errorText.indexOf(currentError.Error);
       elements.push(
-        <mark key={start} className={errorType}>
+        <mark key={start} className={`${errorType} markCount`} count={x}>
           {errorText}
         </mark>
       );
@@ -61,6 +62,6 @@ function ErrorsContent({ paragraphs, parasContent }) {
     }
   }, [highlightedTextRef]);
 
-  return <div ref={highlightedTextRef}>{highlightedText}</div>;
+  return <div ref={highlightedTextRef} className="max-h-96 overflow-auto">{highlightedText}</div>;
 }
 export default ErrorsContent;
