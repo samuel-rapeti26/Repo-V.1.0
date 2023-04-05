@@ -22,7 +22,6 @@ const ViewDictonary = ({ clickRevertBack }) => {
   const headers1 = {
     // "Accept": "application/json",
     // "Content-Type": "application/json",
-    "X-CSRF-TOKEN": key2,
     access_token_cookie: key1,
     Accept: "*/*",
   };
@@ -32,7 +31,7 @@ const ViewDictonary = ({ clickRevertBack }) => {
     setAge(event.target.value);
     try {
       axios
-        .post("http://localhost:2000/viewdict","", {
+        .get("http://localhost:2000/viewdict", {
           headers: headers1,
         })
         .then((response) => {

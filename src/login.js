@@ -20,7 +20,6 @@ function Login() {
   };
 
   const callPassComponent = (event) => {
-    console.log('asda');
     setPassword(event.target.value);
     // console.log("pass", password);
   };

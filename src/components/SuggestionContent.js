@@ -33,11 +33,12 @@ const SuggestionContent = ({ paragraphs, selectedNaratives, parasContent }) => {
         }
         let start = para.StartPos + offset;
         let end = para.EndPos + offset;
+        const trimmedSuggestion = suggestion.trim();
         paragraph =
-          paragraph.slice(0, start) + suggestion + paragraph.slice(end);
-        offset += suggestion.length - (para.EndPos - para.StartPos);
+          paragraph.slice(0, start) + trimmedSuggestion + paragraph.slice(end);
+        offset += trimmedSuggestion.length - (para.EndPos - para.StartPos);
         wordStartIndex = output.length + start;
-        wordEndIndex = output.length + start + suggestion.trim().length - 1;
+        wordEndIndex = output.length + start + trimmedSuggestion.length - 1;
         wordsIndices.push({ start: wordStartIndex, end: wordEndIndex });
       }
     }
@@ -53,12 +54,12 @@ const SuggestionContent = ({ paragraphs, selectedNaratives, parasContent }) => {
     dispatch(SetModifiedText(output));
   }, [output]);
   return (
-    <div className="max-h-96 overflow-auto">
+    <div>
       <TextareaAutosize
         value={modifiedOutput}
         onChange={onModifiedOutputChange}
         style={{ width: "100%" }}
-      />{" "}
+      />
     </div>
   );
 };

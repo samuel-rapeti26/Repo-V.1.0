@@ -11,7 +11,21 @@ const FinalNarrative = () => {
     (state) => state.correctionTableReducer
   );
 
-  const diff = diffWords(inputText, modifiedText);
+  // Diff library doesn't consider special characters in right way.
+  // Hack to replace text with some random string other than special chars and reassign it once we get ouput
+  const placeholder = Date.now().toString(5);
+  const replacedText1 = inputText.replace(/@/g, placeholder);
+  const replacedText2 = modifiedText.replace(/@/g, placeholder);
+
+  const diff = diffWords(replacedText1, replacedText2).map(
+    ({ added, removed, value }) => ({
+      added: added ? true : undefined,
+      removed: removed ? true : undefined,
+      value: value.replace(new RegExp(placeholder, "g"), "@"),
+    })
+  );
+
+  console.log(diff);
   const result = diff.map(function (part, index) {
     const spanStyle = {
       backgroundColor: part.added ? "lightgreen" : part.removed ? "salmon" : "",
@@ -19,8 +33,7 @@ const FinalNarrative = () => {
     if (part.removed) return "";
     return (
       <span key={index} style={spanStyle}>
-        {" "}
-        {part.value}{" "}
+        {part.value}
       </span>
     );
   });
@@ -54,18 +67,16 @@ const FinalNarrative = () => {
 
   return (
     <div id="diff-highlighter">
-      <div ref={diffHighlighter} className="max-h-96 overflow-auto">
-        {" "}
-        {result}{" "}
-      </div>
+      <div ref={diffHighlighter}>{result}</div>
+
       <div className="w-full flex justify-end items-center px-4 gap-2">
         <Button size="large" variant="contained" onClick={generate}>
-          Download doc.{" "}
-        </Button>{" "}
+          Download doc.
+        </Button>
         <Button size="large" variant="contained" onClick={handleCopy}>
-          Copy{" "}
-        </Button>{" "}
-      </div>{" "}
+          Copy
+        </Button>
+      </div>
     </div>
   );
 };

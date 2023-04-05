@@ -66,13 +66,15 @@ function ModifyDictonary() {
   const fetchData = ()=>{
     try {
       axios
-        .post("http://localhost:2000/temptable", "" ,{ headers: headers2 })
+        .get("http://localhost:2000/temptable", { headers: headers1 })
         .then((response) => {
           //   setTable(response.data);
+          console.log("response", response);
           const rowdata = Object.keys(response.data.data).map((key) => ({
             id: key,
             ...response.data.data[key],
           }));
+          console.log("rowdata", rowdata);
           setRows(rowdata);
         })
         .catch((error) => {
@@ -99,7 +101,9 @@ function ModifyDictonary() {
     });
 
     const selected = { word: word, time: time, user: user };
+    console.log("selecteditem", selected);
     setSelectedItems(selected);
+    console.log("hi", selecteditems);
   };
 
   const addwords = () => {
@@ -109,6 +113,7 @@ function ModifyDictonary() {
           headers: headers2,
         })
         .then((response) => {
+          console.log("response", response);
           alert("Word(s) added to the dictionary.");
         })
         .catch((error) => {
@@ -127,6 +132,7 @@ function ModifyDictonary() {
           headers: headers2,
         })
         .then((response) => {
+          console.log("response", response);
           alert("Word(s) removed from the dictionary.");
           fetchData();
         })

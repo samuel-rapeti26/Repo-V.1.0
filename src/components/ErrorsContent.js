@@ -19,6 +19,7 @@ function ErrorsContent({ paragraphs, parasContent }) {
     let paraErrors = errors[paraIndex] || [];
     let currentPos = 0;
     let elements = [];
+
     paraErrors.forEach((currentError) => {
       const start = currentError.StartPos;
       const end = currentError.EndPos;
@@ -27,19 +28,16 @@ function ErrorsContent({ paragraphs, parasContent }) {
       // Add the text leading up to the error
       if (start > currentPos) {
         elements.push(
-          <span key={currentPos}> {para.slice(currentPos, start)} </span>
+          <span key={currentPos}>{para.slice(currentPos, start)}</span>
         );
       }
 
       // Add the highlighted error text
-      // let x = index+1;
-      let x = parseInt(currentError.id);
       const errorText = para.slice(start, end);
       const highlightIndex = start + errorText.indexOf(currentError.Error);
       elements.push(
         <mark key={start} className={errorType}>
-          {" "}
-          {errorText}<sup>{x}</sup>{" "}
+          {errorText}
         </mark>
       );
 
@@ -49,11 +47,11 @@ function ErrorsContent({ paragraphs, parasContent }) {
 
     // Add any remaining text
     if (currentPos < para.length) {
-      elements.push(<span key={currentPos}> {para.slice(currentPos)} </span>);
+      elements.push(<span key={currentPos}>{para.slice(currentPos)}</span>);
     }
 
     // Return the paragraph with error highlights
-    return <p key={paraIndex}> {elements} </p>;
+    return <p key={paraIndex}>{elements}</p>;
   });
 
   useEffect(() => {
@@ -63,11 +61,6 @@ function ErrorsContent({ paragraphs, parasContent }) {
     }
   }, [highlightedTextRef]);
 
-  return (
-    <div ref={highlightedTextRef} className="max-h-96 overflow-auto">
-      {" "}
-      {highlightedText}{" "}
-    </div>
-  );
+  return <div ref={highlightedTextRef}>{highlightedText}</div>;
 }
 export default ErrorsContent;

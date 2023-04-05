@@ -36,8 +36,6 @@ const ErrorHighligtingCorrection = ({
     }
   };
 
-  console.log("hello",selectedNaratvies);
-
   const onFinaliseClick = () => {
     setFinalStep(true);
     setCorrectOutput(finalisedNarratives);
@@ -51,22 +49,15 @@ const ErrorHighligtingCorrection = ({
     let user = [];
     for (let i = 0; i < selectedNaratvies.length; i++) {
       let currentDate = new Date();
-      let t = currentDate.getDate() + "/" + currentDate.getMonth() + 1 +
-      "/" + currentDate.getFullYear() +
-      " " +
+      let t =
         currentDate.getHours() +
         ":" +
         currentDate.getMinutes() +
         ":" +
         currentDate.getSeconds();
-      if (
-        rows[selectedNaratvies[i]].errorType ===
-        "Spelling mistake (Proper Noun)"
-      ) {
-        word.push(rows[selectedNaratvies[i]].error);
-        time.push(t);
-        user.push(userStore);
-      }
+      word.push(rows[selectedNaratvies[i]].error);
+      time.push(t);
+      user.push(userStore);
     }
     let temp = { word: word, time: time, user: user };
     // console.log("hiloo", temp);
@@ -88,6 +79,7 @@ const ErrorHighligtingCorrection = ({
       axios
         .post("http://localhost:2000/updatedict", temp, { headers: headers1 })
         .then((response) => {
+          console.log("response", response);
           alert("Request sent to update dictionary.");
         })
         .catch((error) => {
@@ -97,21 +89,12 @@ const ErrorHighligtingCorrection = ({
       console.error(e);
     }
   };
-  console.log("hi",rowsData);
   let filteredData = rowsData.filter((data) => data.error !== "\n");
-  filteredData.forEach((element)=>{
-    element.id=parseInt(element.id)+1;
-  });
   let valueOptions = new Set();
   filteredData.forEach((element) => {
     valueOptions.add(element.errorType);
   });
   const columns = [
-    {
-      field: "id",
-      headerName: "Serial Num",
-      flex: 1,
-    },
     {
       field: "ParagraphNum",
       headerName: "Paragraph Num",
@@ -141,10 +124,6 @@ const ErrorHighligtingCorrection = ({
     <div className="flex flex-col gap-4">
       <div className="grid grid-cols-1  lg:grid-cols-2 gap-4 h-full">
         <div className="flex flex-col gap-4">
-          <strong style={{ color: "red" }}>
-            Note: Update table will work only for those error whose Error Type
-            is Spelling mistake (Proper Noun)
-          </strong>
           <DataGrid
             rows={filteredData}
             columns={columns}
@@ -217,7 +196,7 @@ const ErrorHighligtingCorrection = ({
                   variant="contained"
                   onClick={onFinaliseClick}
                 >
-                  Finalize
+                  Finalize.
                 </Button>
               </div>
             </div>

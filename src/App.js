@@ -12,10 +12,8 @@ import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Modal } from "./components/common/modal";
 import { SetCorrectionTable } from "./reducers/correctionTable/CorrectionTableActions";
 
 function App() {
@@ -32,8 +30,6 @@ function App() {
   const key1 = Cookies.get("access_token_cookie");
   const key2 = Cookies.get("csrf_access_token");
   const [loading, setLoading] = useState(false);
-  const [noErrorModal, setNoErrorModal] = useState(false);
-
   axios.defaults.withCredentials = true;
   const headers1 = {
     // "Accept": "application/json",
@@ -53,36 +49,28 @@ function App() {
       axios
         .post("http://localhost:2000/summary", payload, { headers: headers1 })
         .then((response) => {
-          const rowdata = response.data.output.Category
-            ? Object.keys(response.data.output.Category).map((key) => ({
-                id: key,
-                error: response.data.output.Error[key],
-                suggestion: response.data.output.Suggestion[key],
-                errorType: response.data.output.ErrorType[key],
-                category: response.data.output.Category[key],
-                StartPos: response.data.output.StartPos[key],
-                EndPos: response.data.output.EndPos[key],
-                Operation: response.data.output.Operation[key],
-                FrontendAction: response.data.output.FrontendAction[key],
-                ParagraphNum: response.data.output.ParagraphNum[key],
-              }))
-            : [];
-
-          const noErrorsFound =
-            response.data &&
-            response.data.output &&
-            response.data.output === "No Errors Found.";
-          if (noErrorsFound) {
-            setNoErrorModal(noErrorsFound);
-          } else {
-            setParasContent(data);
-            dispatch(SetCorrectionTable(rowdata));
-            setSidebarItems({
-              ...sidebarItems,
-              output: true,
-              input: false,
-            });
-          }
+          console.log("response", response);
+          const rowdata = Object.keys(response.data.output.Category).map(
+            (key) => ({
+              id: key,
+              error: response.data.output.Error[key],
+              suggestion: response.data.output.Suggestion[key],
+              errorType: response.data.output.ErrorType[key],
+              category: response.data.output.Category[key],
+              StartPos: response.data.output.StartPos[key],
+              EndPos: response.data.output.EndPos[key],
+              Operation: response.data.output.Operation[key],
+              FrontendAction: response.data.output.FrontendAction[key],
+              ParagraphNum: response.data.output.ParagraphNum[key],
+            })
+          );
+          setParasContent(data);
+          dispatch(SetCorrectionTable(rowdata));
+          setSidebarItems({
+            ...sidebarItems,
+            output: true,
+            input: false,
+          });
         })
         .catch((error) => {
           console.log("error", error);
@@ -96,6 +84,7 @@ function App() {
   };
 
   const Proceed = (narrativeFieldValue) => {
+    console.log("narrative", narrativeFieldValue);
     setParagraph(narrativeFieldValue);
     const temp = narrativeFieldValue
       .split("\n")
@@ -295,31 +284,6 @@ function App() {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-      <Modal
-        modalId="noErrorModal"
-        open={noErrorModal}
-        setOpen={() => setNoErrorModal(false)}
-        title={""}
-        size="xs"
-        escape
-        content={
-          <div className="flex flex-col gap-4 items-center justify-center">
-            <p className="text-gray-800 text-2xl">
-              No Errors Found
-            </p>
-            <div className="flex justify-end gap-2">
-              <Button
-                size="small"
-                variant="contained"
-                color="warning"
-                onClick={() => setNoErrorModal(false)}
-              >
-                Close
-              </Button>
-            </div>
-          </div>
-        }
-      />
     </div>
   );
 }
