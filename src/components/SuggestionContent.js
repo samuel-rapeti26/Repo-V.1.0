@@ -33,7 +33,7 @@ const SuggestionContent = ({ paragraphs, selectedNaratives, parasContent }) => {
         }
         let start = para.StartPos + offset;
         let end = para.EndPos + offset;
-        const trimmedSuggestion = suggestion.trim();
+        const trimmedSuggestion = suggestion;
         paragraph =
           paragraph.slice(0, start) + trimmedSuggestion + paragraph.slice(end);
         offset += trimmedSuggestion.length - (para.EndPos - para.StartPos);
