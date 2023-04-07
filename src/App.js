@@ -2,8 +2,15 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-
-import { IconButton, Button, Backdrop, CircularProgress, Menu, MenuItem } from "@mui/material";
+import { IdleTimerProvider } from "react-idle-timer";
+import {
+  IconButton,
+  Button,
+  Backdrop,
+  CircularProgress,
+  Menu,
+  MenuItem,
+} from "@mui/material";
 import Cookies from "js-cookie";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 
@@ -50,22 +57,26 @@ function App() {
         .post("http://localhost:2000/summary", payload, { headers: headers1 })
         .then((response) => {
           // console.log("response", response);
-          const rowdata = response.data.output.Category ? Object.keys(response.data.output.Category).map(
-            (key) => ({
-              id: key,
-              error: response.data.output.Error[key],
-              suggestion: response.data.output.Suggestion[key],
-              errorType: response.data.output.ErrorType[key],
-              category: response.data.output.Category[key],
-              StartPos: response.data.output.StartPos[key],
-              EndPos: response.data.output.EndPos[key],
-              Operation: response.data.output.Operation[key],
-              FrontendAction: response.data.output.FrontendAction[key],
-              ParagraphNum: response.data.output.ParagraphNum[key],
-            })
-          ) : [];
-          const noErrorsFound = response && response.data && response.data.output && response.data.output === "No Errors Found.";
-          if(noErrorsFound) {
+          const rowdata = response.data.output.Category
+            ? Object.keys(response.data.output.Category).map((key) => ({
+                id: parseInt(key) + 1,
+                error: response.data.output.Error[key],
+                suggestion: response.data.output.Suggestion[key],
+                errorType: response.data.output.ErrorType[key],
+                category: response.data.output.Category[key],
+                StartPos: response.data.output.StartPos[key],
+                EndPos: response.data.output.EndPos[key],
+                Operation: response.data.output.Operation[key],
+                FrontendAction: response.data.output.FrontendAction[key],
+                ParagraphNum: response.data.output.ParagraphNum[key],
+              }))
+            : [];
+          const noErrorsFound =
+            response &&
+            response.data &&
+            response.data.output &&
+            response.data.output === "No Errors Found.";
+          if (noErrorsFound) {
             setNoErrorModal(noErrorsFound);
           } else {
             setParasContent(data);
@@ -76,8 +87,6 @@ function App() {
               input: false,
             });
           }
-          
-          
         })
         .catch((error) => {
           console.log("error", error);
@@ -123,6 +132,7 @@ function App() {
   };
   return (
     <div className="">
+      <IdleTimerProvider timeout={1000 * 3600} onIdle={handleLogout} />
       <header className="py-3 bg-skyblue">
         <div className="px-4">
           <div className="grid grid-cols-3 gap-4">
@@ -303,7 +313,7 @@ function App() {
             <h2 className="text-4xl font-semibold text-gray-500 text-uppercase">
               No Errors found
             </h2>
-          
+
             <div className="flex justify-end gap-2">
               <Button
                 size="small"

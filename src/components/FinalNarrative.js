@@ -13,9 +13,10 @@ const FinalNarrative = () => {
 
   // Diff library doesn't consider special characters in right way.
   // Hack to replace text with some random string other than special chars and reassign it once we get ouput
+  const specialCharRegex = /[,@]/g;
   const placeholder = Date.now().toString(5);
-  const replacedText1 = inputText.replace(/@/g, placeholder);
-  const replacedText2 = modifiedText.replace(/@/g, placeholder);
+  const replacedText1 = inputText.replace(specialCharRegex, placeholder);
+  const replacedText2 = modifiedText.replace(specialCharRegex, placeholder);
 
   const diff = diffWords(replacedText1, replacedText2).map(
     ({ added, removed, value }) => ({

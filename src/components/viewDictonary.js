@@ -31,7 +31,7 @@ const ViewDictonary = ({ clickRevertBack }) => {
     setAge(event.target.value);
     try {
       axios
-        .get("http://localhost:2000/viewdict", {
+        .post("http://localhost:2000/viewdict", {
           headers: headers1,
         })
         .then((response) => {
