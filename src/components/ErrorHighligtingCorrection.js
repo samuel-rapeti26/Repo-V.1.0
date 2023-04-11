@@ -50,17 +50,32 @@ const ErrorHighligtingCorrection = ({
     for (let i = 0; i < selectedNaratvies.length; i++) {
       let currentDate = new Date();
       let t =
+        currentDate.getDate() +
+        "/" +
+        (currentDate.getMonth()+1) +
+        "/" +
+        currentDate.getFullYear() +
+        " " +
         currentDate.getHours() +
         ":" +
         currentDate.getMinutes() +
         ":" +
         currentDate.getSeconds();
-      word.push(rows[selectedNaratvies[i]].error);
-      time.push(t);
-      user.push(userStore);
+        console.log("hello",t);
+      if (
+        rows[selectedNaratvies[i]-1].errorType ===
+        "Spelling mistake (Proper Noun)"
+      ) {
+        word.push(rows[selectedNaratvies[i]-1].error);
+        time.push(t);
+        user.push(userStore);
+        console.log("h1", word);
+        console.log("h2", time);
+        console.log("h3", user);
+      }
     }
     let temp = { word: word, time: time, user: user };
-    // console.log("hiloo", temp);
+    console.log("hiloo", temp);
     setSelected(temp);
 
     //Update table api
@@ -124,8 +139,9 @@ const ErrorHighligtingCorrection = ({
     <div className="flex flex-col gap-4">
       <div className="grid grid-cols-1  lg:grid-cols-2 gap-4 h-full">
         <div className="flex flex-col gap-4">
-          <strong style={{ color:"red"}}>
-          Note: Update dictionary will work only for those error whose Error Type is Spelling mistake (proper Noun)
+          <strong style={{ color: "red" }}>
+            Note: Update dictionary will work only for those error whose Error
+            Type is Spelling mistake (proper Noun)
           </strong>
           <DataGrid
             rows={filteredData}

@@ -13,7 +13,7 @@ const FinalNarrative = () => {
 
   // Diff library doesn't consider special characters in right way.
   // Hack to replace text with some random string other than special chars and reassign it once we get ouput
-  const specialCharRegex = /[,@]/g;
+  const specialCharRegex = /[@,](?![\s\n])/g;
   const placeholder = Date.now().toString(5);
   const replacedText1 = inputText.replace(specialCharRegex, placeholder);
   const replacedText2 = modifiedText.replace(specialCharRegex, placeholder);

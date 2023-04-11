@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -130,6 +130,12 @@ function App() {
     localStorage.clear();
     navigate("/", { replace: true });
   };
+
+  useEffect(() => {
+    if (!user) {
+      handleLogout();
+    }
+  }, []);
   return (
     <div className="">
       <IdleTimerProvider timeout={1000 * 3600} onIdle={handleLogout} />

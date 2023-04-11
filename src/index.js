@@ -2,32 +2,48 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Provider } from "react-redux";
-import store from "./reducers";
+import { persistReducer, persistStore } from 'redux-persist';
+import { PersistGate } from 'redux-persist/integration/react';
+import storage from "redux-persist/lib/storage";
+import { createStore, applyMiddleware } from "redux";
+import thunk from 'redux-thunk';
+
+import rootReducer from "./reducers";
 
 import Login from "./login";
-
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
+const persistConfig = {
+    key: 'root',
+    storage,
+};
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
 const router = createBrowserRouter([
-  {
-    path: "/dashboard",
-    element: <App />,
-  },
-  {
-    path: "/",
-    element: <Login />,
-  },
+    {
+        path: "/dashboard",
+        element: <App />,
+    },
+    {
+        path: "/",
+        element: <Login />,
+    },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
+const store = createStore(persistedReducer, applyMiddleware(thunk));
+
+const persistor = persistStore(store);
+
 root.render(
-  <Provider store={store}>
-    <RouterProvider router={router} />
-  </Provider>
+    <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+            <RouterProvider router={router} />
+        </PersistGate>
+    </Provider>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

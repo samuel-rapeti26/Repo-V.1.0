@@ -66,7 +66,7 @@ function ModifyDictonary() {
   const fetchData = ()=>{
     try {
       axios
-        .get("http://localhost:2000/temptable", { headers: headers1 })
+        .post("http://localhost:2000/temptable","", { headers: headers2 })
         .then((response) => {
           //   setTable(response.data);
           console.log("response", response);

@@ -1,4 +1,8 @@
-import {SET_CORRECTION_TABLE, SET_INPUT_TEXT, SET_MODIFIED_TEXT} from "./CorrectionTableActionTypes";
+import {
+  SET_CORRECTION_TABLE,
+  SET_INPUT_TEXT,
+  SET_MODIFIED_TEXT,
+} from "./CorrectionTableActionTypes";
 
 export const SetCorrectionTable = (table) => async (dispatch) => {
   try {

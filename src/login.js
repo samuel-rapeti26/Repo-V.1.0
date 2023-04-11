@@ -24,7 +24,6 @@ function Login() {
     // console.log("pass", password);
   };
 
-  dispatch(SetUser(User));
   const api = axios.create({
     withCredentials: true,
     baseURL: "http://localhost:2000/userlogin",
@@ -39,6 +38,7 @@ function Login() {
       setLoading(true);
       const response = await api.post("", { User, Password });
       console.log("response", response);
+      dispatch(SetUser(User));
       dispatch(SetRole(response.data.role));
       if (response.data.message === "User Logged-in Successfully.") {
         navigate("/dashboard");

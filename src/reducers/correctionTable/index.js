@@ -4,7 +4,9 @@ import {
   SET_MODIFIED_TEXT,
 } from "./CorrectionTableActionTypes";
 
-const correctionTableReducer = (state, action) => {
+const initialState = { table: [] };
+
+const correctionTableReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_CORRECTION_TABLE:
       return { ...state, table: action.payload };
@@ -13,7 +15,7 @@ const correctionTableReducer = (state, action) => {
     case SET_MODIFIED_TEXT:
       return { ...state, modifiedText: action.payload };
     default:
-      return { table: [] };
+      return state;
   }
 };
 

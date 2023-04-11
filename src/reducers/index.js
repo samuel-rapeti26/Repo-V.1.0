@@ -1,15 +1,10 @@
-import { applyMiddleware, combineReducers, createStore, compose } from "redux";
-import thunkMiddleware from "redux-thunk";
-
+import { combineReducers } from "redux";
 import userReducer from "./user";
 import correctionTableReducer from "./correctionTable";
 
-const rootStore = combineReducers({
+const rootReducer = combineReducers({
   userReducer,
-  correctionTableReducer
+  correctionTableReducer,
 });
-const middlewareEnhancer = applyMiddleware(thunkMiddleware);
-const composedEnhancers = compose(middlewareEnhancer);
-const store = createStore(rootStore, {}, composedEnhancers);
 
-export default store;
+export default rootReducer;
