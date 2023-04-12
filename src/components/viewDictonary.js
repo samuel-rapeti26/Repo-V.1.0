@@ -22,7 +22,7 @@ const ViewDictonary = ({ clickRevertBack }) => {
   const headers1 = {
     // "Accept": "application/json",
     // "Content-Type": "application/json",
-    "X-CSRF-TOKEN": key2,
+     "X-CSRF-TOKEN": key2,
     access_token_cookie: key1,
     Accept: "*/*",
   };
