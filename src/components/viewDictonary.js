@@ -217,5 +217,4 @@ const ViewDictonary = ({ clickRevertBack }) => {
     </div>
   );
 };
-
-export default ViewDictonary;
+ export default ViewDictonary;

@@ -12,11 +12,11 @@ const InputComponent = ({ clickProceed }) => {
   const handleNarrativeChange = (event) => {
      console.log("frominputComponent98",event.target.value);
     setNarrativeFieldValue(event.target.value);
-    if (narrativeFieldValue.length > 0) {
-      setNarrativeFieldEdit(true);
-    } else {
-      setNarrativeFieldEdit(false);
-    }
+    // if (narrativeFieldValue.length > 0) {
+    //   setNarrativeFieldEdit(true);
+    // } else {
+    //   setNarrativeFieldEdit(false);
+    // }
   };
   console.log("narrativeFieldValue98",narrativeFieldValue);
   return (
@@ -33,7 +33,7 @@ const InputComponent = ({ clickProceed }) => {
             placeholder="Paste your Narrative here"
             multiline
             rows={12}
-            disabled={narrativeFieldEdit}
+            // disabled={narrativeFieldEdit}
             value={narrativeFieldValue}
           />
           <div className="w-full flex gap-2 items-center">

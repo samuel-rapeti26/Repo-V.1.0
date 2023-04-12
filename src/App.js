@@ -12,6 +12,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import Cookies from "js-cookie";
+import DocViewer, { DocViewerRenderers } from "react-doc-viewer";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 
 import InputComponent from "./components/inputComponent";
@@ -23,6 +24,9 @@ import ManualPdf from "./assets/Smart Error Detector Tool_User Manual_V1.0.0.pdf
 import "./style.css";
 
 function App() {
+  const docs = [
+    { uri: require("./assets/1.docx") }
+  ];
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [sidebarItems, setSidebarItems] = useState({
@@ -30,6 +34,7 @@ function App() {
     output: false,
     rules: false,
     userManual: false,
+    sampleTemplates: false,
   });
   const [parasContent, setParasContent] = useState([]);
   const [noErrorModal, setNoErrorModal] = useState(false);
@@ -117,6 +122,7 @@ function App() {
       input: true,
       rules: false,
       userManual: false,
+      sampleTemplates: false,
     });
   };
   const [anchorEl, setAnchorEl] = useState(null);
@@ -197,6 +203,7 @@ function App() {
                         output: false,
                         rules: true,
                         userManual: false,
+                        sampleTemplates: false,
                       })
                     }
                   >
@@ -214,10 +221,722 @@ function App() {
                         output: false,
                         rules: false,
                         userManual: true,
+                        sampleTemplates: false,
                       })
                     }
                   >
                     User manual
+                  </div>
+                  <div
+                      className={`text-lg text-white cursor-pointer py-1 ${
+                        sidebarItems.sampleTemplates
+                          && "bg-gray-400 px-2 border-b-2 border-white "
+                      }`}
+                  >
+                    <div className="group custom-dropdown">
+                      <button className="outline-none focus:outline-none flex items-center">
+                        <span className="pr-1 font-semibold flex-1">
+                          Sample Template
+                        </span>
+                        <span>
+                          <svg
+                            className="fill-current h-4 w-4 transform group-hover:-rotate-180 transition duration-150 ease-in-out"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                          >
+                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                          </svg>
+                        </span>
+                      </button>
+                      <ul
+                        className="bg-gray-400 px-2  scale-0 group-hover:scale-100 absolute"
+                      >
+                        {/* <li className="rounded-sm px-3 py-1 hover:bg-gray-800">
+                          Ortho
+                        </li> */}
+                        <li className="rounded-sm relative px-3 py-1 hover:bg-gray-800">
+                        <button className="w-full text-left flex items-center outline-none focus:outline-none">
+                            <span className="pr-1 flex-1">Opthamology</span>
+                            <span className="mr-auto">
+                              <svg
+                                className="fill-current h-4 w-4 transition duration-150 ease-in-out"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                              >
+                                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                              </svg>
+                            </span>
+                          </button>
+                          <ul
+                            className="bg-gray-400 absolute top-0 right-0 "
+                          >
+                            {/* <li className="px-3 py-1 hover:bg-gray-800">
+                              Javascript
+                            </li> */}
+                            <li className="rounded-sm relative px-3 py-1 hover:bg-gray-800">
+                              <button className="w-full text-left flex items-center outline-none focus:outline-none">
+                                <span className="pr-1 flex-1">HPI</span>
+                                <span className="mr-auto">
+                                  <svg
+                                    className="fill-current h-4 w-4 transition duration-150 ease-in-out"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                  </svg>
+                                </span>
+                              </button>
+                              <ul
+                                className="bg-gray-400 absolute top-0 right-0 "
+                              >
+                                <li className="px-3 py-1 hover:bg-gray-800"
+                                 onClick={() =>
+                                  setSidebarItems({
+                                    input: false,
+                                    output: false,
+                                    rules: false,
+                                    userManual: false,
+                                    sampleTemplates: true,
+                                  })
+                                }>
+                                  Template-1
+                                </li>
+                                <li className="px-3 py-1 hover:bg-gray-800">
+                                  Template-2
+                                </li>
+                              </ul>
+                            </li>
+                            <li className="rounded-sm relative px-3 py-1 hover:bg-gray-800">
+                              <button className="w-full text-left flex items-center outline-none focus:outline-none">
+                                <span className="pr-1 flex-1">ROS</span>
+                                <span className="mr-auto">
+                                  <svg
+                                    className="fill-current h-4 w-4 transition duration-150 ease-in-out"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                  </svg>
+                                </span>
+                              </button>
+                              <ul
+                                className="bg-gray-400 absolute top-0 right-0 "
+                              >
+                                <li className="px-3 py-1 hover:bg-gray-800"
+                                 onClick={() =>
+                                  setSidebarItems({
+                                    input: false,
+                                    output: false,
+                                    rules: false,
+                                    userManual: false,
+                                    sampleTemplates: true,
+                                  })
+                                }>
+                                  Template-1
+                                </li>
+                                <li className="px-3 py-1 hover:bg-gray-800">
+                                  Template-2
+                                </li>
+                              </ul>
+                            </li>
+                            <li className="rounded-sm relative px-3 py-1 hover:bg-gray-800">
+                              <button className="w-full text-left flex items-center outline-none focus:outline-none">
+                                <span className="pr-1 flex-1">Cief Complaint</span>
+                                <span className="mr-auto">
+                                  <svg
+                                    className="fill-current h-4 w-4 transition duration-150 ease-in-out"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                  </svg>
+                                </span>
+                              </button>
+                              <ul
+                                className="bg-gray-400 absolute top-0 right-0 "
+                              >
+                                <li className="px-3 py-1 hover:bg-gray-800"
+                                 onClick={() =>
+                                  setSidebarItems({
+                                    input: false,
+                                    output: false,
+                                    rules: false,
+                                    userManual: false,
+                                    sampleTemplates: true,
+                                  })
+                                }>
+                                  Template-1
+                                </li>
+                                <li className="px-3 py-1 hover:bg-gray-800">
+                                  Template-2
+                                </li>
+                              </ul>
+                            </li>
+                            <li className="rounded-sm relative px-3 py-1 hover:bg-gray-800">
+                              <button className="w-full text-left flex items-center outline-none focus:outline-none">
+                                <span className="pr-1 flex-1">PE</span>
+                                <span className="mr-auto">
+                                  <svg
+                                    className="fill-current h-4 w-4 transition duration-150 ease-in-out"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                  </svg>
+                                </span>
+                              </button>
+                              <ul
+                                className="bg-gray-400 absolute top-0 right-0 "
+                              >
+                                <li className="px-3 py-1 hover:bg-gray-800"
+                                 onClick={() =>
+                                  setSidebarItems({
+                                    input: false,
+                                    output: false,
+                                    rules: false,
+                                    userManual: false,
+                                    sampleTemplates: true,
+                                  })
+                                }>
+                                  Template-1
+                                </li>
+                                <li className="px-3 py-1 hover:bg-gray-800">
+                                Template-2
+                                </li>
+                              </ul>
+                            </li>
+                            {/* <li className="px-3 py-1 hover:bg-gray-800">Go</li>
+                            <li className="px-3 py-1 hover:bg-gray-800">
+                              Rust
+                            </li> */}
+                          </ul>
+                        </li>
+                        <li className="rounded-sm relative px-3 py-1 hover:bg-gray-800">
+                        <button className="w-full text-left flex items-center outline-none focus:outline-none">
+                            <span className="pr-1 flex-1">Orthopedic</span>
+                            <span className="mr-auto">
+                              <svg
+                                className="fill-current h-4 w-4 transition duration-150 ease-in-out"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                              >
+                                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                              </svg>
+                            </span>
+                          </button>
+                          <ul
+                            className="bg-gray-400 absolute top-0 right-0 "
+                          >
+                            {/* <li className="px-3 py-1 hover:bg-gray-800">
+                              Javascript
+                            </li> */}
+                            <li className="rounded-sm relative px-3 py-1 hover:bg-gray-800">
+                              <button className="w-full text-left flex items-center outline-none focus:outline-none">
+                                <span className="pr-1 flex-1">HPI</span>
+                                <span className="mr-auto">
+                                  <svg
+                                    className="fill-current h-4 w-4 transition duration-150 ease-in-out"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                  </svg>
+                                </span>
+                              </button>
+                              <ul
+                                className="bg-gray-400 absolute top-0 right-0 "
+                              >
+                                <li className="px-3 py-1 hover:bg-gray-800"
+                                 onClick={() =>
+                                  setSidebarItems({
+                                    input: false,
+                                    output: false,
+                                    rules: false,
+                                    userManual: false,
+                                    sampleTemplates: true,
+                                  })
+                                }>
+                                  Template-1
+                                </li>
+                                <li className="px-3 py-1 hover:bg-gray-800">
+                                  Template-2
+                                </li>
+                              </ul>
+                            </li>
+                            <li className="rounded-sm relative px-3 py-1 hover:bg-gray-800">
+                              <button className="w-full text-left flex items-center outline-none focus:outline-none">
+                                <span className="pr-1 flex-1">ROS</span>
+                                <span className="mr-auto">
+                                  <svg
+                                    className="fill-current h-4 w-4 transition duration-150 ease-in-out"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                  </svg>
+                                </span>
+                              </button>
+                              <ul
+                                className="bg-gray-400 absolute top-0 right-0 "
+                              >
+                                <li className="px-3 py-1 hover:bg-gray-800"
+                                 onClick={() =>
+                                  setSidebarItems({
+                                    input: false,
+                                    output: false,
+                                    rules: false,
+                                    userManual: false,
+                                    sampleTemplates: true,
+                                  })
+                                }>
+                                  Template-1
+                                </li>
+                                <li className="px-3 py-1 hover:bg-gray-800">
+                                  Template-2
+                                </li>
+                              </ul>
+                            </li>
+                            <li className="rounded-sm relative px-3 py-1 hover:bg-gray-800">
+                              <button className="w-full text-left flex items-center outline-none focus:outline-none">
+                                <span className="pr-1 flex-1">Cief Complaint</span>
+                                <span className="mr-auto">
+                                  <svg
+                                    className="fill-current h-4 w-4 transition duration-150 ease-in-out"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                  </svg>
+                                </span>
+                              </button>
+                              <ul
+                                className="bg-gray-400 absolute top-0 right-0 "
+                              >
+                                <li className="px-3 py-1 hover:bg-gray-800"
+                                 onClick={() =>
+                                  setSidebarItems({
+                                    input: false,
+                                    output: false,
+                                    rules: false,
+                                    userManual: false,
+                                    sampleTemplates: true,
+                                  })
+                                }>
+                                  Template-1
+                                </li>
+                                <li className="px-3 py-1 hover:bg-gray-800">
+                                  Template-2
+                                </li>
+                              </ul>
+                            </li>
+                            <li className="rounded-sm relative px-3 py-1 hover:bg-gray-800">
+                              <button className="w-full text-left flex items-center outline-none focus:outline-none">
+                                <span className="pr-1 flex-1">PE</span>
+                                <span className="mr-auto">
+                                  <svg
+                                    className="fill-current h-4 w-4 transition duration-150 ease-in-out"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                  </svg>
+                                </span>
+                              </button>
+                              <ul
+                                className="bg-gray-400 absolute top-0 right-0 "
+                              >
+                                <li className="px-3 py-1 hover:bg-gray-800"
+                                 onClick={() =>
+                                  setSidebarItems({
+                                    input: false,
+                                    output: false,
+                                    rules: false,
+                                    userManual: false,
+                                    sampleTemplates: true,
+                                  })
+                                }>
+                                  Template-1
+                                </li>
+                                <li className="px-3 py-1 hover:bg-gray-800">
+                                Template-2
+                                </li>
+                              </ul>
+                            </li>
+                            {/* <li className="px-3 py-1 hover:bg-gray-800">Go</li>
+                            <li className="px-3 py-1 hover:bg-gray-800">
+                              Rust
+                            </li> */}
+                          </ul>
+                        </li>
+                        <li className="rounded-sm relative px-3 py-1 hover:bg-gray-800">
+                        <button className="w-full text-left flex items-center outline-none focus:outline-none">
+                            <span className="pr-1 flex-1">Pediatric</span>
+                            <span className="mr-auto">
+                              <svg
+                                className="fill-current h-4 w-4 transition duration-150 ease-in-out"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                              >
+                                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                              </svg>
+                            </span>
+                          </button>
+                          <ul
+                            className="bg-gray-400 absolute top-0 right-0 "
+                          >
+                            {/* <li className="px-3 py-1 hover:bg-gray-800">
+                              Javascript
+                            </li> */}
+                            <li className="rounded-sm relative px-3 py-1 hover:bg-gray-800">
+                              <button className="w-full text-left flex items-center outline-none focus:outline-none">
+                                <span className="pr-1 flex-1">HPI</span>
+                                <span className="mr-auto">
+                                  <svg
+                                    className="fill-current h-4 w-4 transition duration-150 ease-in-out"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                  </svg>
+                                </span>
+                              </button>
+                              <ul
+                                className="bg-gray-400 absolute top-0 right-0 "
+                              >
+                                <li className="px-3 py-1 hover:bg-gray-800"
+                                 onClick={() =>
+                                  setSidebarItems({
+                                    input: false,
+                                    output: false,
+                                    rules: false,
+                                    userManual: false,
+                                    sampleTemplates: true,
+                                  })
+                                }>
+                                  Template-1
+                                </li>
+                                <li className="px-3 py-1 hover:bg-gray-800">
+                                  Template-2
+                                </li>
+                              </ul>
+                            </li>
+                            <li className="rounded-sm relative px-3 py-1 hover:bg-gray-800">
+                              <button className="w-full text-left flex items-center outline-none focus:outline-none">
+                                <span className="pr-1 flex-1">ROS</span>
+                                <span className="mr-auto">
+                                  <svg
+                                    className="fill-current h-4 w-4 transition duration-150 ease-in-out"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                  </svg>
+                                </span>
+                              </button>
+                              <ul
+                                className="bg-gray-400 absolute top-0 right-0 "
+                              >
+                                <li className="px-3 py-1 hover:bg-gray-800"
+                                 onClick={() =>
+                                  setSidebarItems({
+                                    input: false,
+                                    output: false,
+                                    rules: false,
+                                    userManual: false,
+                                    sampleTemplates: true,
+                                  })
+                                }>
+                                  Template-1
+                                </li>
+                                <li className="px-3 py-1 hover:bg-gray-800">
+                                  Template-2
+                                </li>
+                              </ul>
+                            </li>
+                            <li className="rounded-sm relative px-3 py-1 hover:bg-gray-800">
+                              <button className="w-full text-left flex items-center outline-none focus:outline-none">
+                                <span className="pr-1 flex-1">Cief Complaint</span>
+                                <span className="mr-auto">
+                                  <svg
+                                    className="fill-current h-4 w-4 transition duration-150 ease-in-out"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                  </svg>
+                                </span>
+                              </button>
+                              <ul
+                                className="bg-gray-400 absolute top-0 right-0 "
+                              >
+                                <li className="px-3 py-1 hover:bg-gray-800"
+                                 onClick={() =>
+                                  setSidebarItems({
+                                    input: false,
+                                    output: false,
+                                    rules: false,
+                                    userManual: false,
+                                    sampleTemplates: true,
+                                  })
+                                }>
+                                  Template-1
+                                </li>
+                                <li className="px-3 py-1 hover:bg-gray-800">
+                                  Template-2
+                                </li>
+                              </ul>
+                            </li>
+                            <li className="rounded-sm relative px-3 py-1 hover:bg-gray-800">
+                              <button className="w-full text-left flex items-center outline-none focus:outline-none">
+                                <span className="pr-1 flex-1">PE</span>
+                                <span className="mr-auto">
+                                  <svg
+                                    className="fill-current h-4 w-4 transition duration-150 ease-in-out"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                  </svg>
+                                </span>
+                              </button>
+                              <ul
+                                className="bg-gray-400 absolute top-0 right-0 "
+                              >
+                                <li className="px-3 py-1 hover:bg-gray-800"
+                                 onClick={() =>
+                                  setSidebarItems({
+                                    input: false,
+                                    output: false,
+                                    rules: false,
+                                    userManual: false,
+                                    sampleTemplates: true,
+                                  })
+                                }>
+                                  Template-1
+                                </li>
+                                <li className="px-3 py-1 hover:bg-gray-800">
+                                Template-2
+                                </li>
+                              </ul>
+                            </li>
+                            {/* <li className="px-3 py-1 hover:bg-gray-800">Go</li>
+                            <li className="px-3 py-1 hover:bg-gray-800">
+                              Rust
+                            </li> */}
+                          </ul>
+                        </li>
+                        <li className="rounded-sm relative px-3 py-1 hover:bg-gray-800">
+                        <button className="w-full text-left flex items-center outline-none focus:outline-none">
+                            <span className="pr-1 flex-1">Gynaecology</span>
+                            <span className="mr-auto">
+                              <svg
+                                className="fill-current h-4 w-4 transition duration-150 ease-in-out"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                              >
+                                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                              </svg>
+                            </span>
+                          </button>
+                          <ul
+                            className="bg-gray-400 absolute top-0 right-0 "
+                          >
+                            {/* <li className="px-3 py-1 hover:bg-gray-800">
+                              Javascript
+                            </li> */}
+                            <li className="rounded-sm relative px-3 py-1 hover:bg-gray-800">
+                              <button className="w-full text-left flex items-center outline-none focus:outline-none">
+                                <span className="pr-1 flex-1">HPI</span>
+                                <span className="mr-auto">
+                                  <svg
+                                    className="fill-current h-4 w-4 transition duration-150 ease-in-out"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                  </svg>
+                                </span>
+                              </button>
+                              <ul
+                                className="bg-gray-400 absolute top-0 right-0 "
+                              >
+                                <li className="px-3 py-1 hover:bg-gray-800"
+                                 onClick={() =>
+                                  setSidebarItems({
+                                    input: false,
+                                    output: false,
+                                    rules: false,
+                                    userManual: false,
+                                    sampleTemplates: true,
+                                  })
+                                }>
+                                  Template-1
+                                </li>
+                                <li className="px-3 py-1 hover:bg-gray-800">
+                                  Template-2
+                                </li>
+                              </ul>
+                            </li>
+                            <li className="rounded-sm relative px-3 py-1 hover:bg-gray-800">
+                              <button className="w-full text-left flex items-center outline-none focus:outline-none">
+                                <span className="pr-1 flex-1">ROS</span>
+                                <span className="mr-auto">
+                                  <svg
+                                    className="fill-current h-4 w-4 transition duration-150 ease-in-out"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                  </svg>
+                                </span>
+                              </button>
+                              <ul
+                                className="bg-gray-400 absolute top-0 right-0 "
+                              >
+                                <li className="px-3 py-1 hover:bg-gray-800"
+                                 onClick={() =>
+                                  setSidebarItems({
+                                    input: false,
+                                    output: false,
+                                    rules: false,
+                                    userManual: false,
+                                    sampleTemplates: true,
+                                  })
+                                }>
+                                  Template-1
+                                </li>
+                                <li className="px-3 py-1 hover:bg-gray-800">
+                                  Template-2
+                                </li>
+                              </ul>
+                            </li>
+                            <li className="rounded-sm relative px-3 py-1 hover:bg-gray-800">
+                              <button className="w-full text-left flex items-center outline-none focus:outline-none">
+                                <span className="pr-1 flex-1">Cief Complaint</span>
+                                <span className="mr-auto">
+                                  <svg
+                                    className="fill-current h-4 w-4 transition duration-150 ease-in-out"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                  </svg>
+                                </span>
+                              </button>
+                              <ul
+                                className="bg-gray-400 absolute top-0 right-0 "
+                              >
+                                <li className="px-3 py-1 hover:bg-gray-800"
+                                 onClick={() =>
+                                  setSidebarItems({
+                                    input: false,
+                                    output: false,
+                                    rules: false,
+                                    userManual: false,
+                                    sampleTemplates: true,
+                                  })
+                                }>
+                                  Template-1
+                                </li>
+                                <li className="px-3 py-1 hover:bg-gray-800">
+                                  Template-2
+                                </li>
+                              </ul>
+                            </li>
+                            <li className="rounded-sm relative px-3 py-1 hover:bg-gray-800">
+                              <button className="w-full text-left flex items-center outline-none focus:outline-none">
+                                <span className="pr-1 flex-1">PE</span>
+                                <span className="mr-auto">
+                                  <svg
+                                    className="fill-current h-4 w-4 transition duration-150 ease-in-out"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                  </svg>
+                                </span>
+                              </button>
+                              <ul
+                                className="bg-gray-400 absolute top-0 right-0 "
+                              >
+                                <li className="px-3 py-1 hover:bg-gray-800"
+                                 onClick={() =>
+                                  setSidebarItems({
+                                    input: false,
+                                    output: false,
+                                    rules: false,
+                                    userManual: false,
+                                    sampleTemplates: true,
+                                  })
+                                }>
+                                  Template-1
+                                </li>
+                                <li className="px-3 py-1 hover:bg-gray-800">
+                                Template-2
+                                </li>
+                              </ul>
+                            </li>
+                            {/* <li className="px-3 py-1 hover:bg-gray-800">Go</li>
+                            <li className="px-3 py-1 hover:bg-gray-800">
+                              Rust
+                            </li> */}
+                          </ul>
+                        </li>
+                        {/* <li className="rounded-sm relative px-3 py-1 hover:bg-gray-800">
+                         
+                         <button className="w-full text-left flex items-center outline-none focus:outline-none">
+                            <span className="pr-1 flex-1">Pediatric</span>
+                            <span className="mr-auto">
+                              <svg
+                                className="fill-current h-4 w-4 transition duration-150 ease-in-out"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                              >
+                                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                              </svg>
+                            </span>
+                          </button>
+                          <ul
+                            className="bg-gray-400 absolute top-0 right-0 "
+                          >
+                            <li className="px-3 py-1 hover:bg-gray-800">
+                              HPI
+                            </li>
+                            <li className="rounded-sm relative px-3 py-1 hover:bg-gray-800">
+                              <button className="w-full text-left flex items-center outline-none focus:outline-none">
+                                <span className="pr-1 flex-1">ROS</span>
+                                <span className="mr-auto">
+                                  <svg
+                                    className="fill-current h-4 w-4 transition duration-150 ease-in-out"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                  </svg>
+                                </span>
+                              </button>
+                              <ul
+                                className="bg-gray-400 absolute top-0 right-0 "
+                              >
+                                <li className="px-3 py-1 hover:bg-gray-800">
+                                  Template1
+                                </li>
+                                <li className="px-3 py-1 hover:bg-gray-800">
+                                  Template2
+                                </li>
+                              </ul>
+                            </li>
+                            <li className="px-3 py-1 hover:bg-gray-800">Cief complaint</li>
+                            <li className="px-3 py-1 hover:bg-gray-800">
+                              
+                            </li>
+                          </ul>
+                        </li> */}
+                        {/* <li className="rounded-sm px-3 py-1 hover:bg-gray-800">
+                          Gynaecology
+                        </li> */}
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -295,6 +1014,16 @@ function App() {
                 </object>
               </div>
             )}
+            {
+              sidebarItems.sampleTemplates && (
+                <div className="h-screen">
+                  <DocViewer
+                  pluginRenderers={DocViewerRenderers}
+                    documents={docs}
+                  />
+              </div>
+              )
+            }
           </div>
         </div>
       </div>
